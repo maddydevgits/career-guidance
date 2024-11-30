@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Video Page</title>
+	<style>
+		/* Center the iframe and set a fixed width and height */
+		.video-container {
+			text-align: center;
+			margin-top: 50px;
+		}
+
+		iframe {
+			width: 80%;
+			/* Adjust width as needed */
+			height: 450px;
+			/* Adjust height as needed */
+			border: none;
+		}
+	</style>
+</head>
+
+<body>
+
+	<h1 style="text-align: center;">Watch the Video</h1>
+
+	<div class="video-container">
+	   <iframe 
+	      th:src="${videoUrl}"  <!-- Dynamically set the video URL here -->
+	      title="Video"
+	      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+	      allowfullscreen>
+	   </iframe>
+	</div>
+	<div style="text-align: center; margin-top: 20px;">
+	    <button onclick="history.back()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Back</button>
+	</div>
+
+</body>
+
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Dashboard</title>
+
+   <!-- font awesome cdn link  -->
+
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+
+   <!-- custom css file link  -->
+
+   <link rel="stylesheet" href="/style/profile v2.css">
+
+</head>
+<body>
+
+<header class="header">
+   
+   <section class="flex">
+
+      <a href="/" class="logo">Career Guidance</a>
+
+      <div class="icons">
+         <div id="menu-btn" class="fas fa-bars"></div>
+         <div id="user-btn" class="fas fa-user"></div>
+         <div id="toggle-btn" class="fas fa-sun"></div>
+      </div>
+
+      <div class="profile">
+         <img 
+            src="/api/profile/profile-pic" 
+            class="image" 
+            alt="Profile Picture"
+            onerror="this.onerror=null; this.src='/images/Screenshot%202024-11-21%20144815.png';"
+         >
+         <h1 th:text="${name}"></h1>
+         <p class="role">User</p>
+         <a href="/dashboard" class="btn">view profile</a>
+         <div class="flex-btn">
+            <a href="/logout" class="option-btn">logout</a>
+         </div>
+      </div>
+
+   </section>
+
+</header>   
+
+<div class="side-bar">
+
+   <div id="close-btn">
+      <i class="fas fa-times"></i>
+   </div>
+
+   <div class="profile">
+      <img 
+            src="/api/profile/profile-pic" 
+            class="image" 
+            alt="Profile Picture"
+            onerror="this.onerror=null; this.src='/images/Screenshot%202024-11-21%20144815.png';"
+      >
+      <h1 th:text="${name}"></h1>
+      <p class="role">User</p>
+      <a href="/dashboard" class="btn">view profile</a>
+   </div>
+
+   <nav class="navbar">
+      <a href="/dashboard"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="/skills" th:if="${session.userType == 'student'}"><i class="fas fa-graduation-cap"></i><span>Skill Gap Analysis</span></a>
+      <a href="/courses"><i class="fas fa-graduation-cap"></i><span>Courses</span></a>
+      <a href="/jobrecommendation"><i class="fas fa-graduation-cap"></i><span>Job Recommendation</span></a>
+      <a href="/feedback" th:if="${session.userType == 'student'}"><i class="fas fa-headset"></i><span>Feedback</span></a>
+
+    </nav>
+
+</div>
+
+<section class="user-profile">
+
+   <h1 class="heading">Your Profile</h1>
+
+   <div class="info">
+
+      <div class="user">
+         <img 
+            src="/api/profile/profile-pic" 
+            class="image" 
+            alt="Profile Picture"
+            onerror="this.onerror=null; this.src='/images/Screenshot%202024-11-21%20144815.png';"
+         >
+        <h1>Welcome, <span th:text="${name}"></span>!</h1>
+        <p>Email: <span th:text="${email}"></span></p>
+         <a href="/update" class="inline-btn">update profile</a>
+      </div>
+   
+
+      <div class="box-container">
+   
+         <div class="box">
+            <div class="flex">
+               <i class="fas fa-bookmark"></i>
+               <div>
+                  <span>Skills</span>
+               </div>
+            
+            </div>
+            <ul id="skills-list" style="font-weight: bold;font-size: medium;float: right;">
+            </ul>
+         </div>
+   
+
+         <div class="box">
+            <div class="flex">
+               <i class="fas fa-bookmark"></i>
+               <div>
+                  <span>Interests</span>
+               </div>
+            
+            </div>
+            <ul id="interests" style="font-weight: bold;font-size: medium;float: right;">
+            </ul>
+         </div>
+
+
+         <div class="box">
+            <div class="flex">
+               <i class="fas fa-bookmark"></i>
+               <div>
+                  <span>Certifications</span>
+               </div>
+            
+            </div>
+            <ul id="certifications" style="font-weight: bold;font-size: medium;float: right;">
+            </ul>
+         </div>
+         <div class="box">
+            <div class="flex">
+               <i class="fas fa-bookmark"></i>
+
+               <div>
+                  <span>Acheivements</span>
+               </div>
+            
+            </div>
+            <ul id="achievements" style="font-weight: bold;font-size: medium;float: right;">
+            </ul>
+         </div>  
+         <div class="box">
+            <div class="flex"></div>
+         </div>
+   </div>
+   
+
+</section>
+
+
+<footer class="footer">
+
+   &copy; copyright @ 2024 by | All Rights Reserved!
+
+</footer>
+
+<!-- custom js file link  -->
+<script src="/script/profile.js"></script>
+<script>
+   document.addEventListener('DOMContentLoaded', async function () {
+      try {
+         const response = await fetch('/api/profiles/skills');
+         if (response.ok) {
+            const skills = await response.json();
+            const skillsList = document.getElementById('skills-list');
+            skills.forEach(skill => {
+                  const li = document.createElement('li');
+                  li.textContent = skill; // Display skill and level
+                  skillsList.appendChild(li);
+            });
+         } else {
+            console.error('Failed to fetch skills', response.statusText);
+         }
+      } catch (error) {
+         console.error('Error:', error);
+      }
+   });
+
+   document.addEventListener('DOMContentLoaded', async () => {
+      try {
+         // Fetch interests from the API
+         const response = await fetch('/api/profile/interests');
+         if (response.ok) {
+               const interests = await response.json();
+               const interestsList = document.getElementById('interests');
+
+               // Populate the <ul> with interests
+               interests.forEach(interest => {
+                  const li = document.createElement('li');
+                  li.textContent = interest.trim(); // Trim to remove extra spaces
+                  interestsList.appendChild(li);
+               });
+         } else {
+               console.error('Failed to fetch interests:', response.statusText);
+         }
+      } catch (error) {
+         console.error('Error fetching interests:', error);
+      }
+   });
+
+   document.addEventListener('DOMContentLoaded', async () => {
+      try {
+         // Fetch certifications from the API
+         const response = await fetch('/api/profile/certifications');
+         if (response.ok) {
+               const certifications = await response.json();
+               const certificationsList = document.getElementById('certifications');
+
+               // Populate the <ul> with certifications
+               certifications.forEach(certification => {
+                  const li = document.createElement('li');
+                  li.textContent = certification.trim(); // Trim to remove extra spaces
+                  certificationsList.appendChild(li);
+               });
+         } else {
+               console.error('Failed to fetch certifications:', response.statusText);
+         }
+      } catch (error) {
+         console.error('Error fetching certifications:', error);
+      }
+   });
+
+   document.addEventListener('DOMContentLoaded', async () => {
+      try {
+         // Fetch achievements from the API
+         const response = await fetch('/api/profile/achievements');
+         if (response.ok) {
+               const achievements = await response.json();
+               const achievementsList = document.getElementById('achievements');
+
+               // Populate the <ul> with achievements
+               achievements.forEach(achievement => {
+                  const li = document.createElement('li');
+                  li.textContent = achievement.trim(); // Trim to remove extra spaces
+                  achievementsList.appendChild(li);
+               });
+         } else {
+               console.error('Failed to fetch achievements:', response.statusText);
+         }
+      } catch (error) {
+         console.error('Error fetching achievements:', error);
+      }
+   });
+
+</script>
+   
+</body>
+</html>
